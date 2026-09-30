@@ -1,82 +1,114 @@
 <div align="center">
 
-# 🛡️ HDR Studio — Knight Online HDR Pack / Unpack Tool
+<img src="assets/hdrstudio_256.png" alt="HDR Studio" width="128">
 
-<br>
+# HDR Studio
 
-![Knight Online](https://img.shields.io/badge/Knight%20Online-HDR%20Tool-blue?style=for-the-badge&logo=data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSIyNCIgaGVpZ2h0PSIyNCIgdmlld0JveD0iMCAwIDI0IDI0IiBmaWxsPSJ3aGl0ZSI+PHBhdGggZD0iTTEyIDJMMyAyMGgyMEwxMiAyem0wIDRsNiAxMkg2bDYtMTJ6Ii8+PC9zdmc+)
-![Platform](https://img.shields.io/badge/Platform-Windows-0078D6?style=for-the-badge&logo=windows&logoColor=white)
-![License](https://img.shields.io/badge/License-Free-green?style=for-the-badge)
+**Knight Online `.hdr` / `.src` Archive Pack & Unpack Tool**
 
-**A lightweight desktop utility for packing and unpacking Knight Online `.hdr` archive files.**
-
-</div>
+[![Platform](https://img.shields.io/badge/Platform-Windows-0078D6?style=flat-square&logo=windows&logoColor=white)](https://github.com/akazaio/HDR_Class)
+[![Language](https://img.shields.io/badge/Built%20with-Go-00ADD8?style=flat-square&logo=go&logoColor=white)](https://go.dev)
+[![Architecture](https://img.shields.io/badge/Arch-x64%20%7C%20x86-orange?style=flat-square)]()
+[![License](https://img.shields.io/badge/License-Free-brightgreen?style=flat-square)]()
 
 ---
 
-## 📋 Overview
+</div>
 
-**HDR Studio** is a standalone Windows application designed for Knight Online private server developers. It provides a simple and intuitive graphical interface to **extract** (unpack) and **create** (pack) `.hdr` archive files used by the Knight Online game client.
+## 📖 Overview
+
+**HDR Studio** is a native Windows GUI application for Knight Online private server developers. It lets you **pack** folders into `.hdr` + `.src` archive pairs and **unpack** them back — with a clean dark-themed interface, drag & drop support, and bilingual (Turkish / English) UI.
 
 ## ✨ Features
 
-| Feature | Description |
-|---------|-------------|
-| 📦 **HDR Unpack** | Extract all files from an `.hdr` archive to a specified directory |
-| 📁 **HDR Pack** | Create a new `.hdr` archive from a folder of files |
-| 🖥️ **GUI Interface** | Easy-to-use graphical interface — no command line needed |
-| ⚡ **Fast Processing** | Optimized for quick packing and unpacking operations |
-| 🔒 **Safe Operation** | Non-destructive extraction, original archives remain untouched |
+- 📦 **Pack** folders into `.hdr` + `.src` archive pairs
+- 📂 **Unpack** matching archive pairs back to files
+- 🌐 **Turkish / English** bilingual interface
+- 🖥️ **Native Windows GUI** — no console window, no dependencies
+- 🎯 **Drag & Drop** support for quick operations
+- ⚡ **Background worker** for responsive long operations
+- 🔒 **Safety checks** — archive bounds validation & path traversal protection
+- 💾 **Optional backup** and overwrite behavior
+- 🎨 **Dark themed** custom controls with double-buffered progress bar
+- 🏗️ **x64 and x86** builds included
+
+## 📥 Quick Download (Executables Only)
+
+> **Just want the tool? Download the exe directly:**
+
+| File | Architecture | Size | SHA-256 |
+|------|:---:|---:|---------|
+| **[`HDRStudio_x64.exe`](dist/HDRStudio_x64.exe)** | x64 | ~1.9 MB | `602503b7...` |
+| **[`HDRStudio_x86.exe`](dist/HDRStudio_x86.exe)** | x86 | ~1.7 MB | `e3960eff...` |
+
+Click the filename → then click **"Download raw file"** button on the next page.
+
+> Full SHA-256 checksums are available in [`dist/SHA256SUMS.txt`](dist/SHA256SUMS.txt)
 
 ## 🚀 Getting Started
 
-### Requirements
+1. Download the exe matching your system (x64 recommended)
+2. Run it — no installation needed
+3. **To Unpack:** Select the `.hdr` file → choose output folder → Extract
+4. **To Pack:** Select source folder → choose output path → Pack
 
-- **OS:** Windows 7 / 8 / 10 / 11 (x64)
-- **Runtime:** No additional dependencies required
+## 📂 What are HDR / SRC Files?
 
-### Installation
+Knight Online uses `.hdr` + `.src` archive pairs to bundle game resources (textures, models, UI data, configuration files). The `.hdr` file contains the directory/header information, while `.src` holds the actual file data. HDR Studio lets you inspect, extract, modify, and repackage these archives.
 
-1. Download `HDRStudio.zip` from this repository
-2. Extract the archive to any folder
-3. Run `HDRStudio.exe`
+## 🏗️ Repository Layout
 
-### Usage
+```
+.github/workflows/build.yml   ─  CI/CD build & release workflow
+assets/                        ─  Application artwork (icons)
+dist/                          ─  Pre-built executables
+  ├─ HDRStudio_x64.exe         ─  64-bit Windows build
+  ├─ HDRStudio_x86.exe         ─  32-bit Windows build
+  └─ SHA256SUMS.txt            ─  Integrity checksums
+source/                        ─  Application source code
+  ├─ main.go                   ─  Complete Go source
+  └─ hdrstudio.ico             ─  Multi-size application icon
+tools/                         ─  Build utilities
+  ├─ embed_pe_resources.py     ─  PE icon/version/manifest builder
+  └─ generate_icon.py          ─  Icon generator script
+build.ps1                      ─  Windows PowerShell build script
+build.sh                       ─  Linux / WSL build script
+sign_release.ps1               ─  Authenticode signing helper
+go.mod                         ─  Go module definition
+CODE_SIGNING.md                ─  Production signing documentation
+```
 
-#### Unpacking an HDR Archive
-1. Launch **HDR Studio**
-2. Click **"Unpack"** or **"Open HDR"**
-3. Select the `.hdr` file you want to extract
-4. Choose the output directory
-5. Click **"Extract"** — done!
+## 🔨 Building from Source
 
-#### Packing Files into an HDR Archive
-1. Launch **HDR Studio**
-2. Click **"Pack"** or **"Create HDR"**
-3. Select the source folder containing your files
-4. Choose the output path for the new `.hdr` file
-5. Click **"Pack"** — your archive is ready!
+### GitHub Actions (Recommended)
 
-## 📂 What is an HDR File?
+Push to GitHub — the workflow builds x64 and x86 automatically. Tagging a release (e.g. `v1.0.3`) prepares signed release artifacts.
 
-`.hdr` files are proprietary archive containers used by the **Knight Online** game client to bundle game resources (textures, models, UI data, etc.) into a single compressed package. HDR Studio lets you inspect, modify, and repackage these archives for development purposes.
+### Windows PowerShell
 
-## 📥 Download
+**Requirements:** Go 1.23+, Python 3, `objcopy` or `llvm-objcopy`
 
-| File | Size | Description |
-|------|------|-------------|
-| [`HDRStudio.zip`](./HDRStudio.zip) | ~1.9 MB | Complete HDR Studio application |
+```powershell
+./build.ps1
+```
 
-## ⚠️ Disclaimer
+### Linux / WSL
 
-This tool is intended for **private server development and educational purposes only**. Use it responsibly and in accordance with applicable terms of service.
+```bash
+./build.sh
+```
+
+Output is written to `dist/`.
+
+## ⚠️ Notes
+
+- **Windows SmartScreen:** Unsigned builds may trigger a reputation warning. See [`CODE_SIGNING.md`](CODE_SIGNING.md) for production signing setup.
+- **Intended Use:** This tool is for private server development and educational purposes.
 
 ---
 
 <div align="center">
 
-**Made with ❤️ by [AKAZA](https://github.com/akazaio)**
-
-![Stars](https://img.shields.io/github/stars/akazaio/HDR_Class?style=social)
+**Made by [AKAZA](https://github.com/akazaio)** · ⭐ Star this repo if you find it useful!
 
 </div>
