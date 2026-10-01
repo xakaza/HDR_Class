@@ -1,5 +1,5 @@
 $ErrorActionPreference = "Stop"
-$Version = if ($env:HDRSTUDIO_VERSION) { $env:HDRSTUDIO_VERSION } else { "1.0.3.0" }
+$Version = if ($env:HDRSTUDIO_VERSION) { $env:HDRSTUDIO_VERSION } else { "1.1.7.0" }
 New-Item -ItemType Directory -Force -Path "dist" | Out-Null
 
 $env:GOOS = "windows"

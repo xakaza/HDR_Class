@@ -221,6 +221,6 @@ if __name__=='__main__':
     ap.add_argument('input_exe')
     ap.add_argument('icon_ico')
     ap.add_argument('output_exe')
-    ap.add_argument('--version',default='1.0.3.0')
+    ap.add_argument('--version',default='1.1.0.0')
     a=ap.parse_args()
     embed(a.input_exe,a.icon_ico,a.output_exe,parse_version(a.version))

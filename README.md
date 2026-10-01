@@ -4,89 +4,152 @@
 
 # HDR Studio
 
-**Knight Online `.hdr` / `.src` Archive Pack & Unpack Tool**
+**Knight Online `.hdr` / `.src` Archive Pack, Unpack & Batch Tool**
 
 [![Platform](https://img.shields.io/badge/Platform-Windows-0078D6?style=flat-square&logo=windows&logoColor=white)](https://github.com/akazaio/HDR_Class)
 [![Language](https://img.shields.io/badge/Built%20with-Go-00ADD8?style=flat-square&logo=go&logoColor=white)](https://go.dev)
 [![Architecture](https://img.shields.io/badge/Arch-x64%20%7C%20x86-orange?style=flat-square)]()
-[![License](https://img.shields.io/badge/License-Free-brightgreen?style=flat-square)]()
 
 ---
 
 </div>
 
-## 📖 Overview
+## Overview
 
-**HDR Studio** is a native Windows GUI application for Knight Online private server developers. It lets you **pack** folders into `.hdr` + `.src` archive pairs and **unpack** them back — with a clean dark-themed interface, drag & drop support, and bilingual (Turkish / English) UI.
+HDR Studio is a native Windows GUI utility for `.hdr` + `.src` resource archives. It supports single-archive workflows, selective `.dxt` extraction, and recursive batch processing for a complete Knight Online client tree.
 
-## ✨ Features
+The UI supports **Türkçe / English** and long operations run on a worker thread so the window remains responsive.
 
-- 📦 **Pack** folders into `.hdr` + `.src` archive pairs
-- 📂 **Unpack** matching archive pairs back to files
-- 🌐 **Turkish / English** bilingual interface
-- 🖥️ **Native Windows GUI** — no console window, no dependencies
-- 🎯 **Drag & Drop** support for quick operations
-- ⚡ **Background worker** for responsive long operations
-- 🔒 **Safety checks** — archive bounds validation & path traversal protection
-- 💾 **Optional backup** and overwrite behavior
-- 🎨 **Dark themed** custom controls with double-buffered progress bar
-- 🏗️ **x64 and x86** builds included
+## Features
 
-## 📥 Quick Download (Executables Only)
+- **Pack** a source folder into `.hdr` + `.src`
+- **Unpack** one archive pair
+- **DXT Only** — extract only `.dxt` entries while preserving their internal folders
+- **Batch Unpack** — recursively discover every `.hdr` + matching `.src` under a selected root
+- **Batch Pack** — recursively find `.hdr` files and rebuild them from their extracted working folders
+- Default batch path: `C:\NTTGame\KnightOnlineEn`
+- Optional separate batch output / working root
+- Recursive directory layout is preserved when a separate root is selected
+- Optional overwrite and backup behavior
+- Drag & drop support
+- Turkish / English interface
+- Responsive background worker and cancellable operations
+- Archive bounds validation and path-traversal protection
+- Custom dark controls, bright owner-drawn checkbox labels, and double-buffered progress display
+- Windows x64 + x86 builds
 
-> **Just want the tool? Download the exe directly:**
+## Operation Modes
 
-| File | Architecture | Size | SHA-256 |
-|------|:---:|---:|---------|
-| **[`HDRStudio_x64.exe`](dist/HDRStudio_x64.exe)** | x64 | ~1.9 MB | `602503b7...` |
-| **[`HDRStudio_x86.exe`](dist/HDRStudio_x86.exe)** | x86 | ~1.7 MB | `e3960eff...` |
+### Pack
 
-Click the filename → then click **"Download raw file"** button on the next page.
+Choose a source folder. HDR Studio creates:
 
-> Full SHA-256 checksums are available in [`dist/SHA256SUMS.txt`](dist/SHA256SUMS.txt)
-
-## 🚀 Getting Started
-
-1. Download the exe matching your system (x64 recommended)
-2. Run it — no installation needed
-3. **To Unpack:** Select the `.hdr` file → choose output folder → Extract
-4. **To Pack:** Select source folder → choose output path → Pack
-
-## 📂 What are HDR / SRC Files?
-
-Knight Online uses `.hdr` + `.src` archive pairs to bundle game resources (textures, models, UI data, configuration files). The `.hdr` file contains the directory/header information, while `.src` holds the actual file data. HDR Studio lets you inspect, extract, modify, and repackage these archives.
-
-## 🏗️ Repository Layout
-
-```
-.github/workflows/build.yml   ─  CI/CD build & release workflow
-assets/                        ─  Application artwork (icons)
-dist/                          ─  Pre-built executables
-  ├─ HDRStudio_x64.exe         ─  64-bit Windows build
-  ├─ HDRStudio_x86.exe         ─  32-bit Windows build
-  └─ SHA256SUMS.txt            ─  Integrity checksums
-source/                        ─  Application source code
-  ├─ main.go                   ─  Complete Go source
-  └─ hdrstudio.ico             ─  Multi-size application icon
-tools/                         ─  Build utilities
-  ├─ embed_pe_resources.py     ─  PE icon/version/manifest builder
-  └─ generate_icon.py          ─  Icon generator script
-build.ps1                      ─  Windows PowerShell build script
-build.sh                       ─  Linux / WSL build script
-sign_release.ps1               ─  Authenticode signing helper
-go.mod                         ─  Go module definition
-CODE_SIGNING.md                ─  Production signing documentation
+```text
+<folder-name>.hdr
+<folder-name>.src
 ```
 
-## 🔨 Building from Source
+If an archive output folder is selected, the pair is written there. Otherwise it is written into the source folder.
 
-### GitHub Actions (Recommended)
+### Unpack
 
-Push to GitHub — the workflow builds x64 and x86 automatically. Tagging a release (e.g. `v1.0.3`) prepares signed release artifacts.
+Choose a `.hdr` file. Its matching `.src` is loaded automatically.
 
-### Windows PowerShell
+Enable **Extract .DXT files only** to skip every non-DXT entry. DXT-only extraction is intentionally non-destructive and never deletes the original HDR/SRC pair.
 
-**Requirements:** Go 1.23+, Python 3, `objcopy` or `llvm-objcopy`
+When no output path is selected:
+
+```text
+archive.hdr -> archive\...
+```
+
+DXT-only mode uses:
+
+```text
+archive.hdr -> archive_DXT\...
+```
+
+### Batch Unpack
+
+Select a root folder. The default is:
+
+```text
+C:\NTTGame\KnightOnlineEn
+```
+
+HDR Studio scans every subfolder recursively and processes each valid `.hdr` + `.src` pair.
+
+With no separate output root:
+
+```text
+C:\NTTGame\KnightOnlineEn\Data\UI.hdr
+-> C:\NTTGame\KnightOnlineEn\Data\UI\...
+```
+
+With DXT-only enabled:
+
+```text
+-> C:\NTTGame\KnightOnlineEn\Data\UI_DXT\...
+```
+
+If a separate output root such as `D:\KO_Extracted` is selected, the original relative directory structure is retained:
+
+```text
+Data\UI.hdr
+-> D:\KO_Extracted\Data\UI\...
+```
+
+Batch Unpack always keeps the source HDR/SRC archives so the operation remains reversible.
+
+### Batch Pack
+
+Select the client/archive root. HDR Studio recursively locates `.hdr` files and looks for the corresponding extracted directory.
+
+Default sibling workflow:
+
+```text
+Data\UI.hdr
+Data\UI.src
+Data\UI\...          <- working folder
+```
+
+`Data\UI\` is packed back into the original `UI.hdr` / `UI.src` pair.
+
+If files were Batch Unpacked to a separate working root, select that same root in **Extracted files root**. Relative folder mapping is preserved automatically.
+
+Enabling backup creates `.bak` copies of existing archive files before replacement.
+
+## Quick Start
+
+1. Run `HDRStudio_x64.exe` on a modern 64-bit Windows system.
+2. Choose **Türkçe** or **English**.
+3. Select one of: Pack, Unpack, Batch Unpack, Batch Pack.
+4. For batch operations, the client path is prefilled with `C:\NTTGame\KnightOnlineEn`.
+5. Adjust output / working root if desired.
+6. For texture-only extraction, enable **Yalnızca .DXT dosyalarını çıkar / Extract .DXT files only**.
+7. Start the operation and follow progress in the activity log.
+
+## Repository Layout
+
+```text
+.github/workflows/build.yml   Windows x64/x86 CI build and release
+assets/                       Application artwork
+source/
+  main.go                     Complete application source
+  hdrstudio.ico               Embedded application icon
+tools/                        PE resource / icon build tools
+dist/                         Prebuilt binaries and checksums
+build.ps1                     Windows build script
+build.sh                      Linux / WSL cross-build script
+sign_release.ps1              Optional Authenticode helper
+CODE_SIGNING.md               Signing setup
+```
+
+## Build
+
+### Windows
+
+Requirements: Go 1.23+, Python 3 and the PE resource tool dependencies used by the build script.
 
 ```powershell
 ./build.ps1
@@ -98,17 +161,19 @@ Push to GitHub — the workflow builds x64 and x86 automatically. Tagging a rele
 ./build.sh
 ```
 
-Output is written to `dist/`.
+### GitHub Actions
 
-## ⚠️ Notes
+Pushing to `main` / `master` builds x64 and x86 artifacts automatically. Version `1.1.7.0` is used by the included workflow unless overridden.
 
-- **Windows SmartScreen:** Unsigned builds may trigger a reputation warning. See [`CODE_SIGNING.md`](CODE_SIGNING.md) for production signing setup.
-- **Intended Use:** This tool is for private server development and educational purposes.
+## Notes
+
+- Batch Pack intentionally uses normal full extraction folders, not `_DXT` folders. A DXT-only folder is a selective export and does not contain enough data to rebuild the whole archive.
+- Unsigned executables can trigger Windows SmartScreen reputation warnings. Production signing support is documented in `CODE_SIGNING.md`.
 
 ---
 
 <div align="center">
 
-**Made by [AKAZA](https://github.com/akazaio)** · ⭐ Star this repo if you find it useful!
+**HDR Studio**
 
 </div>

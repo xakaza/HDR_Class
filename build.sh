@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
 set -euo pipefail
-VERSION="${HDRSTUDIO_VERSION:-1.0.3.0}"
+VERSION="${HDRSTUDIO_VERSION:-1.1.7.0}"
 mkdir -p dist
 GOOS=windows GOARCH=amd64 go build -trimpath -ldflags='-H=windowsgui -s -w' -o dist/HDRStudio_x64.raw.exe ./source
 GOOS=windows GOARCH=386 go build -trimpath -ldflags='-H=windowsgui -s -w' -o dist/HDRStudio_x86.raw.exe ./source
